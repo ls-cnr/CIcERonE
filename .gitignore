@@ -1,3 +1,143 @@
+# MacOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Node.js
 node_modules/
-venv/
+npm-debug.log
+yarn-error.log
+
+# Frontend (Vue.js)
+/frontend/node_modules
+/frontend/.DS_Store
+/frontend/dist
+/frontend/.env.local
+/frontend/.env.*.local
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/pnpm-debug.log*
+
+# Backend (Node.js)
+/backend/node_modules
+/backend/.env
+/backend/npm-debug.log
+/backend/yarn-error.log
+
+# FlaskRAG (Python)
+/flaskRAG/__pycache__/
+/flaskRAG/*.py[cod]
+/flaskRAG/*$py.class
+/flaskRAG/*.so
+/flaskRAG/.Python
+/flaskRAG/build/
+/flaskRAG/develop-eggs/
+/flaskRAG/dist/
+/flaskRAG/downloads/
+/flaskRAG/eggs/
+/flaskRAG/.eggs/
+/flaskRAG/lib/
+/flaskRAG/lib64/
+/flaskRAG/parts/
+/flaskRAG/sdist/
+/flaskRAG/var/
+/flaskRAG/wheels/
+/flaskRAG/*.egg-info/
+/flaskRAG/.installed.cfg
+/flaskRAG/*.egg
+/flaskRAG/MANIFEST
+/flaskRAG/.env
+/flaskRAG/venv/
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environment
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Database
+*.sqlite3
+
+# Environment variables
+.env
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Build files
+/build
+
+# Logs
+logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
