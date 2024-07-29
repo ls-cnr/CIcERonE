@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const initDatabase = require('./dbInit');
 const authRoutes = require('./routes/auth');
+const projectsRoutes = require('./routes/projects');
+const usersRoutes = require('./routes/users');  // Aggiungi questa linea
 require('dotenv').config();
 
 const app = express();
@@ -10,7 +12,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Immediately invoke database initialization
+// Inizializzazione del database
 (async () => {
   try {
     console.log('Checking database status...');
@@ -22,11 +24,13 @@ app.use(express.json());
     }
   } catch (error) {
     console.error('Failed to initialize database:', error);
-    process.exit(1);  // Exit the process if database initialization fails
+    process.exit(1);
   }
 })();
 
 app.use('/auth', authRoutes);
+app.use('/projects', projectsRoutes);
+app.use('/user', usersRoutes);  // Aggiungi questa linea
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome! Database is accessible and initialized.' });
