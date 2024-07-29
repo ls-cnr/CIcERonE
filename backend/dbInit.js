@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs').promises;
+const path = require('path');
 require('dotenv').config();
 
 async function initDatabase() {
@@ -22,18 +23,20 @@ async function initDatabase() {
 
     await connection.query(`USE ${process.env.DB_NAME}`);
 
-    // Check if users table exists
-    const [tables] = await connection.query(`SHOW TABLES LIKE 'users'`);
-    if (tables.length === 0) {
-      const schema = await fs.readFile('schema.sql', 'utf8');
-      await connection.query(schema);
-      isNewDatabase = true;
+    // Array of SQL files to execute in order
+    const sqlFiles = ['users.sql', 'projects.sql', 'files.sql'];
+
+    for (const file of sqlFiles) {
+      const filePath = path.join(__dirname, 'db', file);
+      const sqlContent = await fs.readFile(filePath, 'utf8');
+      await connection.query(sqlContent);
+      console.log(`Executed ${file}`);
     }
 
     if (isNewDatabase) {
       console.log('Database and tables initialized for the first time');
     } else {
-      console.log('Database and tables already exist, no changes made');
+      console.log('Database and tables already exist, schema updated if necessary');
     }
   } catch (error) {
     console.error('Error in database initialization:', error);
