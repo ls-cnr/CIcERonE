@@ -19,7 +19,7 @@
         <span class="toolbar-label">Mental Space Lattice</span>
         <div class="toolbar-buttons">
           <button class="btn" disabled>Upload Doc</button>
-          <button class="btn" disabled>Acquire Viewpoint</button>
+          <button @click="acquireViewpoint" class="btn">Acquire Viewpoint</button>
         </div>
       </div>
 
@@ -32,7 +32,7 @@
           <button @click="copyMentalSpace" class="btn">Copy</button>
         </div>
       </div>
-      
+
 
       <span v-if="toolbarMessage" class="tooltip bottom-tooltip">{{ toolbarMessage }}</span>
     </div>
@@ -125,6 +125,14 @@ export default {
       }, 3000);
     };
 
+    const acquireViewpoint = () => {
+      if (project.value && project.value.id) {
+        router.push({ name: 'AcquireViewpoint', params: { id: project.value.id } });
+      } else {
+        console.error('Project ID not available');
+      }
+    };
+
     onMounted(fetchProjectDetails);
 
     return {
@@ -136,7 +144,8 @@ export default {
       enableUpdate,
       updateProject,
       refreshMentalSpace,
-      copyMentalSpace
+      copyMentalSpace,
+      acquireViewpoint
     };
   }
 };

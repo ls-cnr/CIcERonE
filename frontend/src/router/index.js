@@ -5,6 +5,7 @@ import Dashboard from '../components/Dashboard.vue'
 import Profile from '../components/Profile.vue'
 import NewProject from '../components/NewProject.vue'
 import ProjectView from '../components/ProjectView.vue'
+import AcquireViewpoint from '../components/AcquireViewpoint.vue'
 
 const routes = [
   {
@@ -45,7 +46,13 @@ const routes = [
     name: 'Project',
     component: ProjectView,
     meta: { requiresAuth: true }
-  }
+  },
+  {
+    path: '/project/:id/acquire-viewpoint',
+    name: 'AcquireViewpoint',
+    component: AcquireViewpoint,
+    meta: { requiresAuth: true }
+  },,
 ]
 
 const router = createRouter({
