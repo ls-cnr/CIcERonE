@@ -4,6 +4,7 @@ import Register from '../components/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
 import Profile from '../components/Profile.vue'
 import NewProject from '../components/NewProject.vue'
+import ProjectView from '../components/ProjectView.vue'
 
 const routes = [
   {
@@ -37,6 +38,12 @@ const routes = [
     path: '/new-project',
     name: 'NewProject',
     component: NewProject,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/project/:id',
+    name: 'Project',
+    component: ProjectView,
     meta: { requiresAuth: true }
   }
 ]

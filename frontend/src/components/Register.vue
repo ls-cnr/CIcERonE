@@ -7,12 +7,13 @@
       <input v-model="password" type="password" placeholder="Password" required>
       <button type="submit">Register</button>
     </form>
+    <p>Hai già un account? <router-link to="/login">Accedi</router-link></p>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import '../styles/Login.css';
+import '../styles/Register.css';
 
 export default {
   data() {
@@ -31,11 +32,9 @@ export default {
           password: this.password
         });
         console.log(response.data);
-        // Redirect to login page after successful registration
         this.$router.push('/login');
       } catch (error) {
         console.error(error);
-        // Show error message to the user
         alert('Registration failed. Please try again.');
       }
     }

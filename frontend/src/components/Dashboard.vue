@@ -75,14 +75,12 @@ export default {
         try {
           const token = localStorage.getItem('token');
           await axios.delete(`${import.meta.env.VITE_API_URL}/projects/${projectId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
           });
           this.projects = this.projects.filter(project => project.id !== projectId);
         } catch (error) {
           console.error('Errore nell\'eliminazione del progetto:', error);
+          alert('Errore nell\'eliminazione del progetto. Riprova più tardi.');
         }
       }
     },

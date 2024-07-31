@@ -2,24 +2,23 @@
   <div class="new-project">
     <h2>Crea Nuovo Progetto</h2>
     <form @submit.prevent="createProject">
-      <div>
+      <div class="form-group">
         <label for="title">Titolo del Progetto:</label>
-        <input id="title" v-model="project.title" type="text" required>
+        <textarea id="title" v-model="project.title" required class="title-input"></textarea>
       </div>
-      <div>
+      <div class="form-group">
         <label for="description">Descrizione:</label>
-        <textarea id="description" v-model="project.description"></textarea>
+        <textarea id="description" v-model="project.description" class="description-input"></textarea>
       </div>
       <button type="submit">Crea Progetto</button>
     </form>
-    <button @click="$router.push('/dashboard')" class="back-btn">Torna alla Dashboard</button>
     <div v-if="error" class="error-message">{{ error }}</div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import '../styles/Login.css';
+import '../styles/NewProject.css';
 
 export default {
   name: 'NewProject',
@@ -44,7 +43,8 @@ export default {
           }
         });
         console.log('Progetto creato:', response.data);
-        this.$router.push('/dashboard');
+        // Reindirizza alla pagina del progetto appena creato
+        this.$router.push(`/project/${response.data.projectId}`);
       } catch (error) {
         console.error('Errore nella creazione del progetto:', error);
         this.error = 'Errore nella creazione del progetto. Riprova più tardi.';
@@ -53,4 +53,3 @@ export default {
   }
 };
 </script>
-
