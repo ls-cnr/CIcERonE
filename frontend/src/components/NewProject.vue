@@ -19,6 +19,7 @@
 
 <script>
 import axios from 'axios';
+import '../styles/Login.css';
 
 export default {
   name: 'NewProject',
@@ -53,46 +54,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.new-project {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-label {
-  margin-bottom: 0.5rem;
-}
-
-input, textarea {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.5rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.back-btn {
-  background-color: #2196F3;
-  margin-top: 1rem;
-}
-
-.error-message {
-  color: red;
-  margin-top: 1rem;
-}
-</style>

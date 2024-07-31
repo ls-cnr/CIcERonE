@@ -11,6 +11,7 @@
 
 <script>
 import axios from 'axios';
+import '../styles/Login.css';
 
 export default {
   data() {
