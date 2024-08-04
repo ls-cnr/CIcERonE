@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
+const { pool } = require('../db');
 const authenticateToken = require('../middleware/authenticateToken');
-
-// Configurazione del pool di connessioni MySQL
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 
 // GET route per ottenere il profilo dell'utente
 router.get('/profile', authenticateToken, async (req, res) => {
@@ -33,7 +22,10 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
   } catch (error) {
     console.error('Errore nel recupero del profilo utente:', error);
-    res.status(500).json({ message: 'Errore del server nel recupero del profilo utente' });
+    res.status(500).json({
+      message: 'Errore del server nel recupero del profilo utente',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

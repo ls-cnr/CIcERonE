@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
+const { pool } = require('../db');
 const authenticateToken = require('../middleware/authenticateToken');
-
-// Configurazione del pool di connessioni MySQL
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 
 // GET route per recuperare tutti i progetti di un utente
 router.get('/', authenticateToken, async (req, res) => {
@@ -24,7 +13,10 @@ router.get('/', authenticateToken, async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error('Errore nel recupero dei progetti:', error);
-    res.status(500).json({ message: 'Errore del server nel recupero dei progetti' });
+    res.status(500).json({
+      message: 'Errore del server nel recupero dei progetti',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -46,10 +38,12 @@ router.get('/:id', authenticateToken, async (req, res) => {
     res.json(rows[0]);
   } catch (error) {
     console.error('Errore nel recupero del progetto:', error);
-    res.status(500).json({ message: 'Errore del server nel recupero del progetto' });
+    res.status(500).json({
+      message: 'Errore del server nel recupero del progetto',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
-
 
 // POST route per creare un nuovo progetto
 router.post('/', authenticateToken, async (req, res) => {
@@ -69,7 +63,10 @@ router.post('/', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Errore nella creazione del progetto:', error);
-    res.status(500).json({ message: 'Errore del server nella creazione del progetto' });
+    res.status(500).json({
+      message: 'Errore del server nella creazione del progetto',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -91,7 +88,10 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     res.json({ message: 'Progetto eliminato con successo' });
   } catch (error) {
     console.error('Errore nell\'eliminazione del progetto:', error);
-    res.status(500).json({ message: 'Errore del server nell\'eliminazione del progetto' });
+    res.status(500).json({
+      message: 'Errore del server nell\'eliminazione del progetto',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

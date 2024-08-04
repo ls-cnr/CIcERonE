@@ -1,21 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const { pool } = require('../db');
 
 const router = express.Router();
-
-// Create MySQL connection pool
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 
 router.post('/register', async (req, res) => {
   try {
@@ -29,8 +17,11 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error registering user' });
+    console.error('Registration error:', error);
+    res.status(500).json({
+      error: 'Error registering user',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -52,15 +43,18 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-    { userId: user.id },  // Assicurati che sia { userId: user.id }
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
+      { userId: user.id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
     );
 
     res.json({ token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error logging in' });
+    console.error('Login error:', error);
+    res.status(500).json({
+      error: 'Error logging in',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

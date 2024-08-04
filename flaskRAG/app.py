@@ -4,7 +4,8 @@ from llm_functions import generate_new_lattice, query_implicit_knowledge
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+#load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 app = Flask(__name__)
 
@@ -40,5 +41,8 @@ def query_implicit_knowledge_route():
     return jsonify({"response": response})
 
 
+#if __name__ == '__main__':
+#    app.run(host='127.0.0.1', port=FLASK_PORT, debug=True)
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=FLASK_PORT, debug=True)
+    app.run(host='127.0.0.1', port=int(os.getenv('FLASK_PORT', 5000)), debug=True)

@@ -1,27 +1,20 @@
-const mysql = require('mysql2/promise');
+const { pool } = require('./db');
 const fs = require('fs').promises;
 const path = require('path');
-require('dotenv').config();
 
 async function initDatabase() {
-  let connection;
   let isNewDatabase = false;
   try {
-    connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-    });
-
     // Check if database exists
-    const [rows] = await connection.query(`SHOW DATABASES LIKE '${process.env.DB_NAME}'`);
+    const [rows] = await pool.query(`SHOW DATABASES LIKE '${process.env.DB_NAME}'`);
     if (rows.length === 0) {
-      await connection.query(`CREATE DATABASE ${process.env.DB_NAME}`);
+      console.log(`Creating new database: ${process.env.DB_NAME}`);
+      await pool.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
       isNewDatabase = true;
     }
 
-    await connection.query(`USE ${process.env.DB_NAME}`);
+    // Use the database
+    await pool.query(`USE ${process.env.DB_NAME}`);
 
     // Array of SQL files to execute in order
     const sqlFiles = ['users.sql', 'projects.sql', 'files.sql'];
@@ -29,7 +22,7 @@ async function initDatabase() {
     for (const file of sqlFiles) {
       const filePath = path.join(__dirname, 'db', file);
       const sqlContent = await fs.readFile(filePath, 'utf8');
-      await connection.query(sqlContent);
+      await pool.query(sqlContent);
       console.log(`Executed ${file}`);
     }
 
@@ -41,8 +34,6 @@ async function initDatabase() {
   } catch (error) {
     console.error('Error in database initialization:', error);
     throw error;
-  } finally {
-    if (connection) await connection.end();
   }
   return isNewDatabase;
 }

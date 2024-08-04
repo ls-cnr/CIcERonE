@@ -6,7 +6,26 @@ const projectsRoutes = require('./routes/projects');
 const usersRoutes = require('./routes/users');
 const axios = require('axios');
 const authenticateToken = require('./middleware/authenticateToken');
-require('dotenv').config();
+const { testConnection } = require('./db');
+
+const path = require('path');
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+console.log('Current directory:', __dirname);
+console.log('Parent directory contents:', fs.readdirSync(path.resolve(__dirname, '..')));
+
+// Carica le variabili d'ambiente dal file .env nella root del progetto
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+
+// Aggiungi questo log per debug
+console.log('Loaded environment variables:', {
+  DB_HOST: process.env.DB_HOST,
+  DB_USER: process.env.DB_USER,
+  DB_NAME: process.env.DB_NAME,
+  // Non loggare la password per motivi di sicurezza
+});
+
 
 const app = express();
 const NODE_PORT = process.env.PORT || 3000;
@@ -32,13 +51,30 @@ async function checkFlaskHealth() {
 }
 
 async function startServer() {
-  const isFlaskHealthy = await checkFlaskHealth();
-  if (!isFlaskHealthy) {
-    console.error('Flask server is not healthy. Terminating Node.js server.');
+  try {
+    await testConnection();
+    // ... resto del codice per avviare il server
+  } catch (error) {
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
+}
 
+
+async function startServer() {
   try {
+    // Test della connessione al database
+    await testConnection();
+    console.log('Database connection successful');
+
+    // Controllo dello stato del server Flask
+    const isFlaskHealthy = await checkFlaskHealth();
+    if (!isFlaskHealthy) {
+      console.error('Flask server is not healthy. Terminating Node.js server.');
+      process.exit(1);
+    }
+
+    // Inizializzazione del database
     console.log('Checking database status...');
     const isNewDatabase = await initDatabase();
     if (isNewDatabase) {
@@ -47,11 +83,12 @@ async function startServer() {
       console.log('Connected to existing database');
     }
 
+    // Avvio del server Node.js
     app.listen(NODE_PORT, () => {
       console.log(`Node.js server running on port ${NODE_PORT}`);
     });
   } catch (error) {
-    console.error('Failed to initialize database:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
 }
