@@ -15,11 +15,12 @@ Struttura del progetto:
        - Register.vue: Gestisce la registrazione di nuovi utenti.
        - Dashboard.vue: Mostra l'elenco dei progetti dell'utente e permette di creare/eliminare progetti.
        - NewProject.vue: Form per la creazione di un nuovo progetto.
-       - ProjectView.vue: Visualizza i dettagli di un singolo progetto.
+       - ProjectView.vue: Visualizza i dettagli di un singolo progetto e offre accesso alle funzionalità avanzate.
+       - AcquireViewpoint.vue: Interfaccia per l'acquisizione di un nuovo punto di vista per un progetto.
      - styles/
-       - Login.css, Register.css, Dashboard.css, NewProject.css, ProjectView.css: Stili specifici per ogni componente.
+       - Login.css, Register.css, Dashboard.css, NewProject.css, ProjectView.css, AcquireViewpoint.css: Stili specifici per ogni componente.
      - router/
-       - index.js: Configurazione delle route dell'applicazione.
+       - index.js: Configurazione delle route dell'applicazione, inclusa la nuova route per AcquireViewpoint.
      - App.vue: Componente root dell'applicazione.
      - main.js: Entry point dell'applicazione Vue.
 
@@ -42,6 +43,9 @@ Funzionalità principali:
 3. Dashboard: Visualizzazione di tutti i progetti dell'utente.
 4. Creazione progetto: Form dedicato per la creazione di nuovi progetti con titolo e descrizione.
 5. Visualizzazione progetto: Pagina dedicata per visualizzare i dettagli di un singolo progetto.
+6. Acquire Viewpoint: Nuova funzionalità per acquisire un punto di vista per un progetto specifico.
+   - Interfaccia con due textarea: "source" (1 riga) e "data" (multilinea).
+   - Bottoni "Submit" (al momento disabilitato) e "Cancel" per gestire l'input dell'utente.
 
 Punti chiave:
 - Separazione degli stili in file CSS dedicati.
@@ -51,3 +55,6 @@ Punti chiave:
 - Funzionalità di debug (accesso rapido) nella pagina di login.
 - Utilizzo di MySQL per la persistenza dei dati.
 - Implementazione di CORS e gestione sicura delle password.
+- Nuova funzionalità "Acquire Viewpoint" accessibile dalla pagina di visualizzazione del progetto.
+- Routing migliorato per supportare la navigazione tra la visualizzazione del progetto e l'acquisizione del punto di vista.
+

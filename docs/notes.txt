@@ -1,0 +1,29 @@
+Note (in ordine di priorità):
+
+Alta priorità:
+1. Implementare la logica di backend per la funzionalità "Acquire Viewpoint" e "Upload Doc".
+2. Aggiungere validazione robusta dei dati input lato client e server per tutti i form dell'applicazione.
+3. Implementare una gestione degli errori più robusta e user-friendly in tutta l'applicazione.
+4. Migliorare la sicurezza implementando un meccanismo di refresh token e logout sicuro.
+5. Implementare test automatizzati per le API backend e i componenti frontend critici.
+
+Media priorità:
+6. Aggiungere funzionalità di ricerca, filtro e paginazione per i progetti nella Dashboard.
+7. Implementare un sistema di autosalvataggio e conferma prima di uscire per le modifiche non salvate.
+8. Aggiungere la possibilità di modificare le informazioni del profilo utente e cambiare la password.
+9. Implementare un sistema di notifiche per informare l'utente sulle azioni completate con successo.
+10. Migliorare l'accessibilità dei componenti in tutta l'applicazione.
+
+Bassa priorità:
+11. Considerare l'implementazione di funzionalità avanzate come versioning dei progetti, collaborazione in tempo reale e sistema di tag.
+12. Valutare l'aggiunta di temi o personalizzazione dell'interfaccia utente.
+13. Implementare funzionalità di esportazione dei dati del progetto e del mental space lattice.
+14. Aggiungere animazioni e transizioni per migliorare l'esperienza utente.
+15. Considerare l'implementazione di shortcut da tastiera per le operazioni comuni.
+
+Miglioramenti tecnici:
+16. Valutare l'utilizzo di un ORM come Sequelize per semplificare le operazioni sul database.
+17. Considerare l'uso di Vuex o Pinia per una gestione centralizzata dello stato dell'applicazione.
+18. Implementare un sistema di logging più robusto per facilitare il debugging e il monitoraggio.
+19. Ottimizzare la gestione delle connessioni al database per migliorare le prestazioni.
+20. Considerare l'implementazione di un'architettura a microservizi per una migliore scalabilità futura.
