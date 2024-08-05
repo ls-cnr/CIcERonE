@@ -45,6 +45,29 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// PUT route per aggiornare un progetto specifico
+router.put('/:id', authenticateToken, async (req, res) => {
+  const projectId = req.params.id;
+  const userId = req.user.id;
+  const { title, description } = req.body;
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE projects SET title = ?, description = ? WHERE id = ? AND user_id = ?',
+      [title, description, projectId, userId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Progetto non trovato o non autorizzato' });
+    }
+
+    res.json({ message: 'Progetto aggiornato con successo' });
+  } catch (error) {
+    console.error('Errore nell\'aggiornamento del progetto:', error);
+    res.status(500).json({ message: 'Errore del server nell\'aggiornamento del progetto' });
+  }
+});
+
 // POST route per creare un nuovo progetto
 router.post('/', authenticateToken, async (req, res) => {
   const { title, description } = req.body;

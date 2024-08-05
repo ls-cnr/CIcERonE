@@ -93,10 +93,10 @@ export default {
           }
         });
         isUpdateEnabled.value = false;
-        showUpdateMessage('Project updated successfully!');
+        showUpdateMessage('Progetto aggiornato con successo!');
       } catch (error) {
-        console.error('Error updating project:', error);
-        showUpdateMessage('Failed to update project.');
+        console.error('Errore nell\'aggiornamento del progetto:', error);
+        showUpdateMessage('Errore nell\'aggiornamento del progetto.');
       }
     };
 
