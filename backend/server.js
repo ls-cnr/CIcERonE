@@ -113,25 +113,40 @@ app.get('/flask-health', async (req, res) => {
 app.post('/projects/:id/update-mental-space', authenticateToken, async (req, res) => {
   try {
     const projectId = req.params.id;
-    const { interview } = req.body;
+    const { source, interview } = req.body;
 
-    if (!interview) {
-      return res.status(400).json({ error: 'Interview data is required' });
+    if (!source || !interview) {
+      return res.status(400).json({ success: false, error: 'Source and interview data are required' });
     }
 
     const response = await axios.post(`http://127.0.0.1:${FLASK_PORT}/update_mental_space`, {
       project_id: projectId,
+      source,
       interview
     });
 
     if (response.data.success) {
-      res.json({ message: 'Mental space lattice updated successfully' });
+      res.json({ success: true, message: 'Mental space lattice updated successfully' });
     } else {
-      res.status(500).json({ error: 'Failed to update mental space lattice' });
+      res.status(500).json({ success: false, error: 'Failed to update mental space lattice' });
     }
   } catch (error) {
     console.error('Error updating mental space lattice:', error);
-    res.status(500).json({ error: 'Error updating mental space lattice' });
+
+    // Gestione specifica dell'errore di connessione
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({
+        success: false,
+        error: 'Unable to connect to the Flask server. The service may be down or unreachable.'
+      });
+    }
+
+    // Gestione generica degli errori
+    res.status(500).json({
+      success: false,
+      error: 'An error occurred while updating the mental space lattice',
+      details: error.message
+    });
   }
 });
 

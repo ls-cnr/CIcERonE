@@ -21,10 +21,11 @@ def health_check():
 def update_mental_space():
     data = request.json
     project_id = data['project_id']
+    source = data['source']
     interview = data['interview']
 
     current_lattice = get_mental_space_lattice(project_id)
-    new_lattice = generate_new_lattice(current_lattice, interview)
+    new_lattice = generate_new_lattice(current_lattice, source, interview)
     update_success = update_mental_space_lattice(project_id, new_lattice)
 
     return jsonify({"success": update_success})
