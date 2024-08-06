@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'App',
+  name: 'Mental Space Latice',
   computed: {
     showNavigation() {
       // Mostra la navigazione solo nelle pagine di login e registrazione
@@ -17,6 +17,8 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

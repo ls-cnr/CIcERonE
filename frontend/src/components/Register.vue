@@ -7,13 +7,13 @@
       <input v-model="password" type="password" placeholder="Password" required>
       <button type="submit">Register</button>
     </form>
-    <p>Hai già un account? <router-link to="/login">Accedi</router-link></p>
+    <p>Do you already have an account? <router-link to="/login">Login</router-link></p>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import '../styles/Register.css';
+//import '../styles/Register.css';
 
 export default {
   data() {
@@ -41,3 +41,41 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.register {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 0.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+</style>

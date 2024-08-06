@@ -17,9 +17,10 @@
 
 <script>
 import axios from 'axios';
-import '../styles/Profile.css';
+//import '../styles/Profile.css';
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Profile',
   data() {
     return {
@@ -56,3 +57,42 @@ export default {
 };
 </script>
 
+<style scoped>
+.profile {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profile-info {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  margin-bottom: 0.5rem;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.back-btn {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.back-btn:hover {
+  background-color: #0b7dda;
+}
+</style>
