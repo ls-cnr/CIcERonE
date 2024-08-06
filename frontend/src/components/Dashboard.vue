@@ -1,61 +1,63 @@
 <template>
   <div class="dashboard">
-    <!-- Barra del titolo -->
     <header class="header">
       <h1>{{ toolName }}</h1>
     </header>
 
     <div class="main-content">
-      <!-- Barra laterale -->
       <aside class="sidebar">
         <nav>
           <div class="upper-nav">
-            <button @click="$router.push('/new-project')" class="new-project-btn">New Project</button>
+            <button @click="$router.push('/new-project')" class="new-project-btn">
+              <span class="material-icons">add_circle</span>
+              New Project
+            </button>
           </div>
           <div class="lower-nav">
-            <router-link to="/profile" class="nav-link">User Profile</router-link>
-            <a href="#" @click.prevent="logout" class="nav-link">Logout</a>
+            <router-link to="/profile" class="nav-link">
+              <span class="material-icons">person</span>
+              User Profile
+            </router-link>
+            <a href="#" @click.prevent="logout" class="nav-link">
+              <span class="material-icons">exit_to_app</span>
+              Logout
+            </a>
           </div>
         </nav>
       </aside>
 
-      <!-- Lista dei progetti -->
       <main class="project-list">
         <h2>Your Projects</h2>
         <ul v-if="projects.length">
           <li v-for="project in projects" :key="project.id" class="project-item">
             <router-link :to="'/project/' + project.id" class="project-info">
-              {{ truncateProjectInfo(project.title, project.description) }}
+              <span class="project-title">{{ project.title }}</span>
+              <span class="project-description">{{ truncateDescription(project.description) }}</span>
             </router-link>
             <button @click="deleteProject(project.id)" class="delete-btn" aria-label="Delete project">
               <span class="material-icons">delete</span>
             </button>
           </li>
         </ul>
-        <p v-else>You haven’t created any projects yet.</p>
+        <p v-else class="no-projects">You haven't created any projects yet.</p>
       </main>
     </div>
   </div>
 </template>
 
 <script>
+import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 import axios from 'axios';
-//import '../styles/Dashboard.css';
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Dashboard',
-  data() {
-    return {
-      toolName: 'Mental Space Tool',
-      projects: []
-    };
-  },
-  created() {
-    this.fetchProjects();
-  },
-  methods: {
-    async fetchProjects() {
+  setup() {
+    const router = useRouter();
+    const toolName = ref('Mental Space Tool');
+    const projects = ref([]);
+
+    const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/projects`, {
@@ -64,39 +66,48 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-        this.projects = response.data;
+        projects.value = response.data;
       } catch (error) {
-        console.error('Errore nel recupero dei progetti:', error);
+        console.error('Error fetching projects:', error);
         if (error.response && error.response.status === 401) {
-          // Token non valido o scaduto, reindirizza al login
-          this.$router.push('/login');
+          router.push('/login');
         }
       }
-    },
-    async deleteProject(projectId) {
-      if (confirm('Sei sicuro di voler eliminare questo progetto?')) {
+    };
+
+    const deleteProject = async (projectId) => {
+      if (confirm('Are you sure you want to delete this project?')) {
         try {
           const token = localStorage.getItem('token');
           await axios.delete(`${import.meta.env.VITE_API_URL}/projects/${projectId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: {'Authorization': `Bearer ${token}`}
           });
-          this.projects = this.projects.filter(project => project.id !== projectId);
+          projects.value = projects.value.filter(project => project.id !== projectId);
         } catch (error) {
-          console.error('Errore nell\'eliminazione del progetto:', error);
-          alert('Errore nell\'eliminazione del progetto. Riprova più tardi.');
+          console.error('Error deleting project:', error);
+          alert('Error deleting project. Please try again later.');
         }
       }
-    },
-    logout() {
-      localStorage.removeItem('token');
-      this.$router.push('/login');
-    },
-    truncateProjectInfo(title, description) {
-      const combined = `${title}: ${description}`;
-      if (combined.length <= 70) return combined;
-      return combined.substring(0, 67) + '...';
-    }
+    };
 
+    const logout = () => {
+      localStorage.removeItem('token');
+      router.push('/login');
+    };
+
+    const truncateDescription = (description) => {
+      return description.length > 50 ? description.substring(0, 47) + '...' : description;
+    };
+
+    onMounted(fetchProjects);
+
+    return {
+      toolName,
+      projects,
+      deleteProject,
+      logout,
+      truncateDescription
+    };
   }
 };
 </script>
@@ -113,19 +124,22 @@ export default {
   color: white;
   padding: 1rem;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .main-content {
   display: flex;
   flex: 1;
+  overflow: hidden;
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px;
   background-color: #f1f1f1;
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar nav {
@@ -144,62 +158,82 @@ export default {
 
 .new-project-btn {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background-color: #4CAF50;
   color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.new-project-btn:hover {
+  background-color: #45a049;
+}
+
+.new-project-btn .material-icons {
+  margin-right: 0.5rem;
 }
 
 .nav-link {
-  display: block;
-  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
   text-decoration: none;
   color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #e0e0e0;
+}
+
+.nav-link .material-icons {
+  margin-right: 0.5rem;
 }
 
 .project-list {
   flex: 1;
   padding: 1rem;
+  overflow-y: auto;
 }
 
 .project-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
-  padding: 0;  /* Rimuoviamo il padding qui */
-  background-color: #f9f9f9;
+  margin-bottom: 0.75rem;
+  background-color: #ffffff;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
-  height: 50px;  /* Altezza fissa per ogni elemento della lista */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .project-item:hover {
-  background-color: rgba(76, 175, 80, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .project-info {
-  text-decoration: none !important;
-  color: #333;
   flex-grow: 1;
-  font-size: 1.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-decoration: none;
+  color: #333;
+  padding: 1rem;
   display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 1rem;  /* Spostiamo il padding qui */
-  margin: 0;  /* Rimuoviamo qualsiasi margin */
-  text-align: left;
+  flex-direction: column;
 }
 
-.project-info:hover,
-.project-info:focus,
-.project-info:active {
-  text-decoration: none !important;
+.project-title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.project-description {
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .delete-btn {
@@ -214,15 +248,16 @@ export default {
   justify-content: center;
   align-items: center;
   transition: background-color 0.3s ease;
-  flex-shrink: 0;
-  margin-right: 0.5rem;  /* Aggiungiamo un po' di margine a destra */
+  margin-right: 0.75rem;
 }
 
 .delete-btn:hover {
   background-color: #d32f2f;
 }
 
-.delete-btn .material-icons {
-  font-size: 20px;
+.no-projects {
+  text-align: center;
+  color: #666;
+  margin-top: 2rem;
 }
 </style>

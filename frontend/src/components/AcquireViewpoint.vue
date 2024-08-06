@@ -8,14 +8,15 @@
     </div>
     <div class="form-group">
       <label for="source">Source:</label>
-      <textarea
+      <input
         id="source"
         v-model="source"
-        rows="1"
-        class="source-textarea"
+        type="text"
+        class="input-field"
         required
         @input="checkFields"
-      ></textarea>
+        placeholder="Enter the source of the viewpoint"
+      />
     </div>
     <div class="form-group">
       <label for="data">Data:</label>
@@ -23,9 +24,10 @@
         id="data"
         v-model="data"
         rows="10"
-        class="data-textarea"
+        class="input-field"
         required
         @input="checkFields"
+        placeholder="Enter the data for the viewpoint"
       ></textarea>
     </div>
     <div class="button-group">
@@ -45,7 +47,6 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
-//import '../styles/AcquireViewpoint.css';
 
 export default {
   name: 'AcquireViewpoint',
@@ -85,13 +86,10 @@ export default {
       } catch (err) {
         console.error('Error acquiring viewpoint:', err);
         if (err.response) {
-          // Errore di risposta dal server
           error.value = err.response.data.error || 'An error occurred while acquiring the viewpoint.';
         } else if (err.request) {
-          // Errore di rete
           error.value = 'Unable to connect to the server. Please check your network connection.';
         } else {
-          // Altro tipo di errore
           error.value = err.message || 'An unexpected error occurred.';
         }
       } finally {
@@ -121,62 +119,78 @@ export default {
 
 <style scoped>
 .acquire-viewpoint {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
   font-weight: bold;
+  color: #555;
 }
 
-.source-textarea,
-.data-textarea {
+.input-field {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-family: Arial, sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.source-textarea {
-  resize: none;
+.input-field:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
-.data-textarea {
-  min-height: 200px;
+textarea.input-field {
+  min-height: 150px;
+  resize: vertical;
 }
 
 .button-group {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
-.submit-btn,
 .acquire-btn {
   background-color: #4CAF50;
   color: white;
 }
 
-.submit-btn:disabled,
+.acquire-btn:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
 .acquire-btn:disabled,
 .cancel-btn:disabled {
-  background-color: #cccccc;
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -186,9 +200,13 @@ label {
   color: white;
 }
 
+.cancel-btn:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
 .error-message {
-  color: red;
-  background-color: #ffeeee;
+  color: #f44336;
+  background-color: #ffebee;
   border: 1px solid #ffcccc;
   padding: 10px;
   margin-bottom: 15px;
@@ -211,7 +229,11 @@ label {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

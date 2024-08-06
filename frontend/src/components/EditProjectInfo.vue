@@ -1,12 +1,12 @@
 <template>
-  <div class="new-project">
-    <h2>Create a New Project</h2>
+  <div class="edit-project-info">
+    <h2>Edit Project Information</h2>
     <div v-if="error" class="error-message">{{ error }}</div>
     <div v-if="isLoading" class="loading-message">
-      Creating project... Please wait.
+      Updating project... Please wait.
       <div class="loading-spinner"></div>
     </div>
-    <form @submit.prevent="createProject">
+    <form @submit.prevent="updateProject">
       <div class="form-group">
         <label for="title">Title:</label>
         <input
@@ -33,11 +33,11 @@
       <div class="button-group">
         <button
           type="submit"
-          class="btn create-btn"
+          class="btn update-btn"
           :disabled="!isFormValid || isLoading"
         >
-          <span class="material-icons">add_circle</span>
-          Create Project
+          <span class="material-icons">save</span>
+          Update Project
         </button>
         <button @click="cancel" type="button" class="btn cancel-btn" :disabled="isLoading">Cancel</button>
       </div>
@@ -46,13 +46,14 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, reactive, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
 export default {
-  name: 'NewProject',
+  name: 'EditProjectInfo',
   setup() {
+    const route = useRoute();
     const router = useRouter();
     const project = reactive({ title: '', description: '' });
     const isFormValid = ref(false);
@@ -63,7 +64,7 @@ export default {
       isFormValid.value = project.title.trim() !== '' && project.description.trim() !== '';
     };
 
-    const createProject = async () => {
+    const updateProject = async () => {
       if (!isFormValid.value) return;
 
       isLoading.value = true;
@@ -71,18 +72,17 @@ export default {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/projects`, project, {
+        await axios.put(`${import.meta.env.VITE_API_URL}/projects/${route.params.id}`, project, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
 
-        console.log('Project created:', response.data);
-        router.push('/dashboard');
+        router.push(`/project/${route.params.id}`);
       } catch (err) {
-        console.error('Error creating project:', err);
-        error.value = 'An error occurred while creating the project. Please try again.';
+        console.error('Error updating project:', err);
+        error.value = 'An error occurred while updating the project. Please try again.';
       } finally {
         isLoading.value = false;
       }
@@ -90,9 +90,26 @@ export default {
 
     const cancel = () => {
       if (!isLoading.value) {
+        router.push(`/project/${route.params.id}`);
+      }
+    };
+
+    const fetchProjectDetails = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/projects/${route.params.id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        Object.assign(project, response.data);
+      } catch (error) {
+        console.error('Error fetching project details:', error);
         router.push('/dashboard');
       }
     };
+
+    onMounted(fetchProjectDetails);
 
     return {
       project,
@@ -100,7 +117,7 @@ export default {
       isLoading,
       error,
       checkFields,
-      createProject,
+      updateProject,
       cancel
     };
   }
@@ -108,7 +125,7 @@ export default {
 </script>
 
 <style scoped>
-.new-project {
+.edit-project-info {
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
@@ -152,7 +169,7 @@ label {
 }
 
 .description-input {
-  min-height: 100px;
+  min-height: 150px;
   resize: vertical;
 }
 
@@ -175,16 +192,16 @@ label {
   gap: 0.5rem;
 }
 
-.create-btn {
+.update-btn {
   background-color: #4CAF50;
   color: white;
 }
 
-.create-btn:hover:not(:disabled) {
+.update-btn:hover:not(:disabled) {
   background-color: #45a049;
 }
 
-.create-btn:disabled {
+.update-btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
@@ -223,15 +240,7 @@ label {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.material-icons {
-  font-size: 1.25rem;
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

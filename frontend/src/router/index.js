@@ -6,6 +6,7 @@ import Profile from '../components/Profile.vue'
 import NewProject from '../components/NewProject.vue'
 import ProjectView from '../components/ProjectView.vue'
 import AcquireViewpoint from '../components/AcquireViewpoint.vue'
+import EditProjectInfo from '../components/EditProjectInfo.vue'  // Importa il nuovo componente
 
 const routes = [
   {
@@ -52,7 +53,13 @@ const routes = [
     name: 'AcquireViewpoint',
     component: AcquireViewpoint,
     meta: { requiresAuth: true }
-  },,
+  },
+  {
+    path: '/project/:id/edit',  // Nuova rotta per EditProjectInfo
+    name: 'EditProjectInfo',
+    component: EditProjectInfo,
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
