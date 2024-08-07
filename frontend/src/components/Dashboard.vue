@@ -54,7 +54,7 @@ export default {
   name: 'Dashboard',
   setup() {
     const router = useRouter();
-    const toolName = ref('Mental Space Tool');
+    const toolName = ref('CIcERonE');
     const projects = ref([]);
 
     const fetchProjects = async () => {

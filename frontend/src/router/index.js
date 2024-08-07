@@ -7,8 +7,12 @@ import NewProject from '../components/NewProject.vue'
 import ProjectView from '../components/ProjectView.vue'
 import AcquireViewpoint from '../components/AcquireViewpoint.vue'
 import EditProjectInfo from '../components/EditProjectInfo.vue'  // Importa il nuovo componente
+import AnalysisView from '../components/AnalysisView.vue'
+
+// ... (altre importazioni e rotte esistenti) ...
 
 const routes = [
+
   {
     path: '/',
     name: 'Home',
@@ -60,6 +64,13 @@ const routes = [
     component: EditProjectInfo,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/project/:id/analysis',
+    name: 'Analysis',
+    component: AnalysisView,
+    meta: { requiresAuth: true }
+  },
+
 ]
 
 const router = createRouter({

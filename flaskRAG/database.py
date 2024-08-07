@@ -55,3 +55,83 @@ def update_mental_space_lattice(project_id, new_lattice):
                 cursor.close()
                 connection.close()
     return False
+
+# Nuova funzione per ottenere l'analisi di un progetto
+def get_project_analysis(project_id):
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = "SELECT analysis FROM projects WHERE id = %s"
+            cursor.execute(query, (project_id,))
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return "Analysis not yet available"
+        except Error as e:
+            print(f"Errore nel recupero dell'analisi del progetto: {e}")
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+    return "Analysis not yet available"
+
+# Nuova funzione per aggiornare l'analisi di un progetto
+def update_project_analysis(project_id, new_analysis):
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = "UPDATE projects SET analysis = %s WHERE id = %s"
+            cursor.execute(query, (new_analysis, project_id))
+            connection.commit()
+            return True
+        except Error as e:
+            print(f"Errore nell'aggiornamento dell'analisi del progetto: {e}")
+            return False
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+    return False
+
+# Nuova funzione per ottenere lo stato di generate_analysis
+def get_generate_analysis_status(project_id):
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = "SELECT generate_analysis FROM projects WHERE id = %s"
+            cursor.execute(query, (project_id,))
+            result = cursor.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return False
+        except Error as e:
+            print(f"Errore nel recupero dello stato generate_analysis: {e}")
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+    return False
+
+# Nuova funzione per aggiornare lo stato di generate_analysis
+def update_generate_analysis_status(project_id, status):
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = "UPDATE projects SET generate_analysis = %s WHERE id = %s"
+            cursor.execute(query, (status, project_id))
+            connection.commit()
+            return True
+        except Error as e:
+            print(f"Errore nell'aggiornamento dello stato generate_analysis: {e}")
+            return False
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+    return False

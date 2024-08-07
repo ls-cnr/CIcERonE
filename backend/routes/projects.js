@@ -73,11 +73,13 @@ router.post('/', authenticateToken, async (req, res) => {
   const { title, description } = req.body;
   const userId = req.user.id;
   const mental_space_lattice = "Empty mental space"; // Valore predefinito
+  const analysis = "Analysis not yet available"; // Nuovo valore predefinito
+  const generate_analysis = false; // Nuovo valore predefinito
 
   try {
     const [result] = await pool.query(
-      'INSERT INTO projects (user_id, title, description, mental_space_lattice) VALUES (?, ?, ?, ?)',
-      [userId, title, description, mental_space_lattice]
+      'INSERT INTO projects (user_id, title, description, mental_space_lattice, analysis, generate_analysis) VALUES (?, ?, ?, ?, ?, ?)',
+      [userId, title, description, mental_space_lattice, analysis, generate_analysis]
     );
 
     res.status(201).json({

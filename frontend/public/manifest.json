@@ -1,11 +1,11 @@
 {
-  "name": "Mental Space App",
-  "short_name": "MentalSpace",
+  "name": "CIcERonE WebApp",
+  "short_name": "CIcERonE",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "150x150",
-      "type": "image/svg+xml"
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon"
     },
     {
       "src": "/apple-touch-icon.png",

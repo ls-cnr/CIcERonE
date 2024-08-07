@@ -3,8 +3,68 @@ Ecco una sintesi del progetto che abbiamo creato finora:
 Architettura implementata:
 - Frontend: Vue.js
 - Backend: Node.js con Express
+- FlaskLLM: python with Flask and langchain
 - Database: MySQL
 - Autenticazione: JSON Web Tokens (JWT)
+
+
+├── backend
+│   ├── db
+│   │   ├── files.sql
+│   │   ├── projects.sql
+│   │   └── users.sql
+│   ├── db.js
+│   ├── dbInit.js
+│   ├── middleware
+│   │   └── authenticateToken.js
+│   ├── node_modules
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── routes
+│   │   ├── auth.js
+│   │   ├── projects.js
+│   │   └── users.js
+│   ├── server.js
+├── docs
+├── flaskRAG
+│   ├── app.py
+│   ├── database.py
+│   ├── llm_functions.py
+│   └── venv
+├── frontend
+│   ├── README.md
+│   ├── index.html
+│   ├── jsconfig.json
+│   ├── node_modules
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   └── manifest.json
+│   ├── src
+│   │   ├── App.vue
+│   │   ├── assets
+│   │   ├── components
+│   │   │   ├── AcquireViewpoint.vue
+│   │   │   ├── AnalysisView.vue
+│   │   │   ├── Dashboard.vue
+│   │   │   ├── EditProjectInfo.vue
+│   │   │   ├── Login.vue
+│   │   │   ├── NewProject.vue
+│   │   │   ├── Profile.vue
+│   │   │   ├── ProjectView.vue
+│   │   │   ├── Register.vue
+│   │   ├── main.js
+│   │   ├── router
+│   │   │   └── index.js
+│   │   ├── stores
+│   │   ├── styles
+│   │   └── views
+│   ├── vite.config.js
+│   └── vitest.config.js
+├── start-app.bat
+└── start-app.sh
+
 
 Struttura del progetto:
 
