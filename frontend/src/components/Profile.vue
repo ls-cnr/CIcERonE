@@ -1,40 +1,37 @@
 <template>
   <div class="profile">
-    <h2>Profilo Utente</h2>
+    <h2>User Profile</h2>
     <div class="profile-info">
       <div class="info-item">
         <label>Username:</label>
-        <span>{{ user.username }}</span>
+        <span class="info-value">{{ user.username }}</span>
       </div>
       <div class="info-item">
         <label>Email:</label>
-        <span>{{ user.email }}</span>
+        <span class="info-value">{{ user.email }}</span>
       </div>
     </div>
-    <button @click="$router.push('/dashboard')" class="back-btn">Torna alla Dashboard</button>
+    <div class="button-group">
+      <button @click="goToDashboard" class="btn back-btn">
+        <span class="material-icons">arrow_back</span>
+        Back to Dashboard
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 import axios from 'axios';
-//import '../styles/Profile.css';
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Profile',
-  data() {
-    return {
-      user: {
-        username: '',
-        email: ''
-      }
-    };
-  },
-  created() {
-    this.fetchUserProfile();
-  },
-  methods: {
-    async fetchUserProfile() {
+  setup() {
+    const router = useRouter();
+    const user = ref({username: '', email: ''});
+
+    const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/profile`, {
@@ -43,56 +40,105 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-        this.user = response.data;
+        user.value = response.data;
       } catch (error) {
-        console.error('Errore nel recupero del profilo:', error);
+        console.error('Error fetching user profile:', error);
         if (error.response && error.response.status === 401) {
-          this.$router.push('/login');
+          router.push('/login');
         } else {
-          alert('Errore nel caricamento del profilo. Riprova più tardi.');
+          alert('Error loading profile. Please try again later.');
         }
       }
-    }
+    };
+
+    const goToDashboard = () => {
+      router.push('/dashboard');
+    };
+
+    onMounted(fetchUserProfile);
+
+    return {
+      user,
+      goToDashboard
+    };
   }
 };
 </script>
 
 <style scoped>
 .profile {
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 2rem auto;
   padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
 }
 
 .profile-info {
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .info-item {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
 }
 
 label {
   font-weight: bold;
-  margin-right: 0.5rem;
+  color: #555;
+  width: 100px;
+  margin-right: 1rem;
+}
+
+.info-value {
+  color: #333;
+  flex-grow: 1;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .back-btn {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  background-color: #2196F3;
+  background-color: #4CAF50;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
 }
 
 .back-btn:hover {
-  background-color: #0b7dda;
+  background-color: #45a049;
+}
+
+.material-icons {
+  font-size: 1.25rem;
 }
 </style>

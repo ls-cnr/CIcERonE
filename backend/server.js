@@ -12,19 +12,19 @@ const path = require('path');
 const fs = require('fs');
 const dotenv = require('dotenv');
 
-console.log('Current directory:', __dirname);
-console.log('Parent directory contents:', fs.readdirSync(path.resolve(__dirname, '..')));
+//console.log('Current directory:', __dirname);
+//console.log('Parent directory contents:', fs.readdirSync(path.resolve(__dirname, '..')));
 
 // Carica le variabili d'ambiente dal file .env nella root del progetto
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 // Aggiungi questo log per debug
-console.log('Loaded environment variables:', {
-  DB_HOST: process.env.DB_HOST,
-  DB_USER: process.env.DB_USER,
-  DB_NAME: process.env.DB_NAME,
-  // Non loggare la password per motivi di sicurezza
-});
+// console.log('Loaded environment variables:', {
+//   DB_HOST: process.env.DB_HOST,
+//   DB_USER: process.env.DB_USER,
+//   DB_NAME: process.env.DB_NAME,
+//   // Non loggare la password per motivi di sicurezza
+// });
 
 
 const app = express();

@@ -19,7 +19,7 @@
           <div class="toolbar-buttons">
             <button class="btn" disabled>Upload Doc</button>
             <button @click="acquireViewpoint" class="btn icon-btn">
-              <span class="material-icons">add_circle</span>
+              <span class="material-icons">description</span>
               Acquire Viewpoint
             </button>
           </div>

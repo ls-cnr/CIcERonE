@@ -5,15 +5,15 @@ const authenticateToken = require('../middleware/authenticateToken');
 
 // GET route per ottenere il profilo dell'utente
 router.get('/profile', authenticateToken, async (req, res) => {
-  console.log('Richiesta profilo ricevuta');
-  console.log('User ID dalla richiesta:', req.user.id);
+  //console.log('Richiesta profilo ricevuta');
+  //console.log('User ID dalla richiesta:', req.user.id);
   try {
     const [rows] = await pool.query(
       'SELECT id, username, email FROM users WHERE id = ?',
       [req.user.id]
     );
 
-    console.log('Risultato query:', rows);
+    //console.log('Risultato query:', rows);
 
     if (rows.length > 0) {
       res.json(rows[0]);

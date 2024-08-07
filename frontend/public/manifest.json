@@ -1,0 +1,19 @@
+{
+  "name": "Mental Space App",
+  "short_name": "MentalSpace",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "150x150",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#3498db",
+  "background_color": "#f0f0f0",
+  "display": "standalone"
+}

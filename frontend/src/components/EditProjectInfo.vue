@@ -37,7 +37,7 @@
           :disabled="!isFormValid || isLoading"
         >
           <span class="material-icons">save</span>
-          Update Project
+          Update Project Info
         </button>
         <button @click="cancel" type="button" class="btn cancel-btn" :disabled="isLoading">Cancel</button>
       </div>
