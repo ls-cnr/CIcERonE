@@ -43,7 +43,13 @@ def update_mental_space_lattice(project_id, new_lattice):
     if connection:
         try:
             cursor = connection.cursor()
-            query = "UPDATE projects SET mental_space_lattice = %s WHERE id = %s"
+
+            query = """
+            UPDATE projects 
+            SET mental_space_lattice = %s, generate_analysis = TRUE 
+            WHERE id = %s
+            """
+
             cursor.execute(query, (new_lattice, project_id))
             connection.commit()
             return True
