@@ -5,7 +5,8 @@ from langchain_core.output_parsers import StrOutputParser
 #from langchain_chroma import Chroma
 
 # Inizializza il modello Ollama
-llm = Ollama(model="gemma2:latest")
+#llm = Ollama(model="gemma2:latest")
+llm = Ollama(model="llama3.1:latest")
 
 # Inizializza embeddings e vector store
 embeddings = OllamaEmbeddings()
@@ -20,6 +21,9 @@ def generate_new_lattice(current_lattice, source, interview):
         "Play the role of an Analyst eliciting knowledge from domain of interest."
          "Your input come from {source} and interview data is {interview}"
         "Your responsibility is to maintain updated the Mental Space Lattice: {mental_space_lattice}"
+        "Follow silently these instructions (Task A, TaskB and Task C) and then"
+        "Print the new Mental Space Lattice only; do not put courtesy sentences, no preamble and no conclusion."
+"
         "Task A) Identify mental spaces that unfold by an interview"
         "1) Copy all the existing sections and phrases of the current Mental Space Lattice "
         "in the new version. 2) Select all the relevant portions of text from the interview."
@@ -45,7 +49,6 @@ def generate_new_lattice(current_lattice, source, interview):
         "3.2) Record phases that generated the mental space as sentences, "
         "3.3) Record the source of each phrase by enclosing it in brackets ([ ])."
         
-        "Print the new Mental Space Lattice only; do not put courtesy sentences, no preamble and no conclusion."
     )
 
     prompt = ChatPromptTemplate.from_template(template)
@@ -62,12 +65,12 @@ def generate_new_lattice(current_lattice, source, interview):
 
 def query_implicit_knowledge(lattice):
     template = (
-        "You are a Software Engineer who is eliciting requirements for the {domain_of_interest}."
-        "Domain knowledge is stored in a Mental Space Lattice: {lattice}, "
-        "could you suggest how to conduct the interview to the next caregiver?"
-        "there is something unclear to investigate? "
-        "there is implicit knowledge to discover?"
-        "Could you produce a list of question to ask (and their rationale)? "
+        "Play the role of an Analyst eliciting knowledge from domain of interest."
+        "Analyze the knowledge in this Mental Space Lattice: {lattice}."
+        "1) Look at every single mental space: is there something unclear to investigate?"
+        "2) Compare diverse viewpoints on the same topic: is there some incoherence to investigate?"
+        "3) Look at the whole mental space lattice: there is implicit knowledge to discover?"
+        "Produce a list of questions to ask (and their rationale) to the next stakeholder."
     )
 
     prompt = ChatPromptTemplate.from_template(template)
