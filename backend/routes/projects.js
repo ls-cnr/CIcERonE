@@ -49,22 +49,49 @@ router.get('/:id', authenticateToken, async (req, res) => {
 router.put('/:id', authenticateToken, async (req, res) => {
   const projectId = req.params.id;
   const userId = req.user.id;
-  const { title, description } = req.body;
+  const { title, description, analysis, generate_analysis } = req.body;
 
   try {
-    const [result] = await pool.query(
-      'UPDATE projects SET title = ?, description = ? WHERE id = ? AND user_id = ?',
-      [title, description, projectId, userId]
-    );
+    let updateFields = [];
+    let updateValues = [];
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Progetto non trovato o non autorizzato' });
+    if (title !== undefined && title !== null && title.trim() !== '') {
+      updateFields.push('title = ?');
+      updateValues.push(title);
     }
 
-    res.json({ message: 'Progetto aggiornato con successo' });
+    if (description !== undefined && description !== null) {
+      updateFields.push('description = ?');
+      updateValues.push(description);
+    }
+
+    if (analysis !== undefined) {
+      updateFields.push('analysis = ?');
+      updateValues.push(analysis);
+    }
+
+    if (generate_analysis !== undefined) {
+      updateFields.push('generate_analysis = ?');
+      updateValues.push(generate_analysis);
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(400).json({ message: 'No valid fields to update' });
+    }
+
+    const query = `UPDATE projects SET ${updateFields.join(', ')} WHERE id = ? AND user_id = ?`;
+    updateValues.push(projectId, userId);
+
+    const [result] = await pool.query(query, updateValues);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Project not found or not authorized' });
+    }
+
+    res.json({ message: 'Project updated successfully' });
   } catch (error) {
-    console.error('Errore nell\'aggiornamento del progetto:', error);
-    res.status(500).json({ message: 'Errore del server nell\'aggiornamento del progetto' });
+    console.error('Error updating project:', error);
+    res.status(500).json({ message: 'Error updating project', details: error.message });
   }
 });
 

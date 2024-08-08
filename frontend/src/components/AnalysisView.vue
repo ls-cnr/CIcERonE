@@ -134,10 +134,17 @@ export default {
     };
 
     const refreshAnalysis = async () => {
-      project.value.generate_analysis = true;
-      await generateAnalysis();
+    try {
+      isLoading.value = true;
+      await fetchProjectAnalysis();
       showToolbarMessage('Analysis refreshed!');
-    };
+    } catch (error) {
+      console.error('Error refreshing analysis:', error);
+      showToolbarMessage('Error refreshing analysis');
+    } finally {
+      isLoading.value = false;
+    }
+  };
 
     const copyAnalysis = () => {
       navigator.clipboard.writeText(project.value.analysis)
