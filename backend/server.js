@@ -158,13 +158,35 @@ app.post('/projects/:id/query-implicit-knowledge', authenticateToken, async (req
       project_id: projectId
     });
 
-    res.json({
-      message: 'Implicit knowledge query successful',
-      data: response.data.response
-    });
+    if (response.data && response.data.response) {
+      res.json({
+        success: true,
+        message: 'Analysis generated successfully',
+        data: response.data.response
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to generate analysis'
+      });
+    }
   } catch (error) {
     console.error('Error querying implicit knowledge:', error);
-    res.status(500).json({ error: 'Error querying implicit knowledge' });
+
+    // Gestione specifica dell'errore di connessione
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({
+        success: false,
+        error: 'Unable to connect to the Flask server. The service may be down or unreachable.'
+      });
+    }
+
+    // Gestione generica degli errori
+    res.status(500).json({
+      success: false,
+      error: 'An error occurred while generating the analysis',
+      details: error.message
+    });
   }
 });
 

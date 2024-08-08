@@ -83,7 +83,11 @@ def update_project_analysis(project_id, new_analysis):
     if connection:
         try:
             cursor = connection.cursor()
-            query = "UPDATE projects SET analysis = %s WHERE id = %s"
+            query = """
+            UPDATE projects 
+            SET analysis = %s, generate_analysis = FALSE 
+            WHERE id = %s
+            """
             cursor.execute(query, (new_analysis, project_id))
             connection.commit()
             return True
@@ -117,21 +121,3 @@ def get_generate_analysis_status(project_id):
                 connection.close()
     return False
 
-# Nuova funzione per aggiornare lo stato di generate_analysis
-def update_generate_analysis_status(project_id, status):
-    connection = get_db_connection()
-    if connection:
-        try:
-            cursor = connection.cursor()
-            query = "UPDATE projects SET generate_analysis = %s WHERE id = %s"
-            cursor.execute(query, (status, project_id))
-            connection.commit()
-            return True
-        except Error as e:
-            print(f"Errore nell'aggiornamento dello stato generate_analysis: {e}")
-            return False
-        finally:
-            if connection.is_connected():
-                cursor.close()
-                connection.close()
-    return False

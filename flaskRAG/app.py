@@ -1,5 +1,9 @@
 from flask import Flask, request, jsonify
-from database import get_mental_space_lattice, update_mental_space_lattice
+from database import (
+    get_mental_space_lattice,
+    update_mental_space_lattice,
+    update_project_analysis
+)
 from llm_functions import generate_new_lattice, query_implicit_knowledge
 from dotenv import load_dotenv
 import os
@@ -36,14 +40,20 @@ def query_implicit_knowledge_route():
     data = request.json
     project_id = data['project_id']
 
+    # Recupera il mental space lattice dal database
     lattice = get_mental_space_lattice(project_id)
+
+    # Genera la nuova analisi
     response = query_implicit_knowledge(lattice)
 
-    return jsonify({"response": response})
+    # Aggiorna il campo analysis e imposta generate_analysis a false in un'unica operazione
+    update_success = update_project_analysis(project_id, response)
 
+    if update_success:
+        return jsonify({"response": response, "success": True})
+    else:
+        return jsonify({"error": "Failed to update analysis", "success": False}), 500
 
-#if __name__ == '__main__':
-#    app.run(host='127.0.0.1', port=FLASK_PORT, debug=True)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=int(os.getenv('FLASK_PORT', 5000)), debug=True)

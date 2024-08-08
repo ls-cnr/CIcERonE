@@ -3,7 +3,7 @@
     <h2>Acquire Viewpoint</h2>
     <div v-if="error" class="error-message">{{ error }}</div>
     <div v-if="isLoading" class="loading-message">
-      Acquiring viewpoint... This may take a few minutes.
+      Updating the Mental Space Lattice... This may take a few minutes.
       <div class="loading-spinner"></div>
     </div>
     <div class="form-group">
