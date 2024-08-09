@@ -1,0 +1,75 @@
+{
+  "chatModels": [
+    {
+      "id": "local_ollama",
+      "name": "Local Ollama",
+      "isDefault": true,
+      "requiresAPIKey": false,
+      "llmModels": [
+        { "id": "llama2", "name": "Ollama 2" },
+        { "id": "llama3", "name": "Ollama 3" },
+        { "id": "llama3.1", "name": "Ollama 3.1" }
+      ]
+    },
+    {
+      "id": "openai",
+      "name": "Open AI",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "gpt3", "name": "GPT-3" },
+        { "id": "gpt4", "name": "GPT-4" }
+      ]
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "claude2", "name": "Claude 2" },
+        { "id": "claude3", "name": "Claude 3" }
+      ]
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "azure_gpt3", "name": "Azure GPT-3" },
+        { "id": "azure_gpt4", "name": "Azure GPT-4" }
+      ]
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "palm", "name": "PaLM" },
+        { "id": "gemini", "name": "Gemini" }
+      ]
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "cohere1", "name": "Cohere 1" },
+        { "id": "cohere2", "name": "Cohere 2" }
+      ]
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA",
+      "isDefault": false,
+      "requiresAPIKey": true,
+      "llmModels": [
+        { "id": "nvidia_llm1", "name": "NVIDIA LLM 1" },
+        { "id": "nvidia_llm2", "name": "NVIDIA LLM 2" }
+      ]
+    }
+  ]
+}

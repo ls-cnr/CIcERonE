@@ -7,10 +7,14 @@ const usersRoutes = require('./routes/users');
 const axios = require('axios');
 const authenticateToken = require('./middleware/authenticateToken');
 const { testConnection } = require('./db');
+const listEndpoints = require('express-list-endpoints');
+
+const fs = require('fs').promises;
 
 const path = require('path');
-const fs = require('fs');
+//const fs = require('fs');
 const dotenv = require('dotenv');
+
 
 //console.log('Current directory:', __dirname);
 //console.log('Parent directory contents:', fs.readdirSync(path.resolve(__dirname, '..')));
@@ -33,6 +37,13 @@ const FLASK_PORT = process.env.FLASK_PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+
+app.get('/debug/routes', (req, res) => {
+  const routes = listEndpoints(app);
+  res.json(routes);
+});
+
 
 async function checkFlaskHealth() {
   try {
@@ -189,6 +200,25 @@ app.post('/projects/:id/query-implicit-knowledge', authenticateToken, async (req
     });
   }
 });
+
+// GET route per ottenere tutti i modelli chat e LLM associati
+
+app.get('/chat-llm-models', authenticateToken, async (req, res) => {
+  console.log('Received request for /chat-llm-models');
+  try {
+    const configPath = path.join(__dirname, '..',  'model.config.json');
+    console.log('Attempting to read config file from:', configPath);
+    const configFile = await fs.readFile(configPath, 'utf8');
+    const config = JSON.parse(configFile);
+    console.log('Successfully read and parsed config file');
+
+    res.json(config);
+  } catch (error) {
+    console.error('Error reading model configuration:', error);
+    res.status(500).json({ message: 'Error fetching models configuration', error: error.message });
+  }
+});
+
 
 startServer();
 

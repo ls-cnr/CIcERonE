@@ -23,7 +23,7 @@ def generate_new_lattice(current_lattice, source, interview):
         "Your responsibility is to maintain updated the Mental Space Lattice: {mental_space_lattice}"
         "Follow silently these instructions (Task A, TaskB and Task C) and then"
         "Print the new Mental Space Lattice only; do not put courtesy sentences, no preamble and no conclusion."
-"
+
         "Task A) Identify mental spaces that unfold by an interview"
         "1) Copy all the existing sections and phrases of the current Mental Space Lattice "
         "in the new version. 2) Select all the relevant portions of text from the interview."
