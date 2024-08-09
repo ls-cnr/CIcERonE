@@ -204,13 +204,13 @@ app.post('/projects/:id/query-implicit-knowledge', authenticateToken, async (req
 // GET route per ottenere tutti i modelli chat e LLM associati
 
 app.get('/chat-llm-models', authenticateToken, async (req, res) => {
-  console.log('Received request for /chat-llm-models');
+  //console.log('Received request for /chat-llm-models');
   try {
     const configPath = path.join(__dirname, '..',  'model.config.json');
-    console.log('Attempting to read config file from:', configPath);
+    //console.log('Attempting to read config file from:', configPath);
     const configFile = await fs.readFile(configPath, 'utf8');
     const config = JSON.parse(configFile);
-    console.log('Successfully read and parsed config file');
+    //console.log('Successfully read and parsed config file');
 
     res.json(config);
   } catch (error) {

@@ -29,7 +29,7 @@ def update_mental_space():
     interview = data['interview']
 
     current_lattice = get_mental_space_lattice(project_id)
-    new_lattice = generate_new_lattice(current_lattice, source, interview)
+    new_lattice = generate_new_lattice(project_id,current_lattice, source, interview)
     update_success = update_mental_space_lattice(project_id, new_lattice)
 
     return jsonify({"success": update_success})
@@ -44,7 +44,7 @@ def query_implicit_knowledge_route():
     lattice = get_mental_space_lattice(project_id)
 
     # Genera la nuova analisi
-    response = query_implicit_knowledge(lattice)
+    response = query_implicit_knowledge(project_id,lattice)
 
     # Aggiorna il campo analysis e imposta generate_analysis a false in un'unica operazione
     update_success = update_project_analysis(project_id, response)

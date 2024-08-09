@@ -1,22 +1,66 @@
 from langchain_community.llms import Ollama
+from langchain_openai import ChatOpenAI, AzureChatOpenAI
+
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_anthropic import ChatAnthropic
+
 from langchain_core.output_parsers import StrOutputParser
+from database import get_db_connection
+
 #from langchain_chroma import Chroma
 
 # Inizializza il modello Ollama
 #llm = Ollama(model="gemma2:latest")
-llm = Ollama(model="llama3.1:latest")
+#llm = Ollama(model="llama3.1:latest")
 
 # Inizializza embeddings e vector store
 embeddings = OllamaEmbeddings()
 #vectorstore = None  # Questo dovrebbe essere inizializzato con i tuoi dati
 
-# Queste variabili dovrebbero essere definite o importate da qualche parte
-#mental_space_lattice = ""  # Definisci questa variabile
-#instructions_mental_space = ""  # Definisci questa variabile
 
-def generate_new_lattice(current_lattice, source, interview):
+def get_project_llm_config(project_id):
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            query = """
+                SELECT chat_model_id, llm_model_id, api_key
+                FROM projects
+                WHERE id = %s
+            """
+            cursor.execute(query, (project_id,))
+            result = cursor.fetchone()
+            return result
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+    return None
+
+def create_llm_instance(project_id):
+    config = get_project_llm_config(project_id)
+    if config:
+        chat_model_id = config['chat_model_id']
+        llm_model_id = config['llm_model_id']
+        api_key = config['api_key']
+
+        if chat_model_id == 'local_ollama':
+            return Ollama(model=llm_model_id)
+        elif chat_model_id == 'openai':
+            return ChatOpenAI(model=llm_model_id, api_key=api_key)
+        elif chat_model_id == 'anthropic':
+            return ChatAnthropic(model=llm_model_id, api_key=api_key)
+        elif chat_model_id == 'azure':
+            return AzureChatOpenAI(model=llm_model_id, api_key=api_key)
+        else:
+            raise ValueError(f"Unsupported chat model: {chat_model_id}")
+    else:
+        raise ValueError("Project configuration not found")
+
+
+def generate_new_lattice(project_id, current_lattice, source, interview):
+    llm = create_llm_instance(project_id)
     template = (
         "Play the role of an Analyst eliciting knowledge from domain of interest."
          "Your input come from {source} and interview data is {interview}"
@@ -63,7 +107,8 @@ def generate_new_lattice(current_lattice, source, interview):
 #        "instructions": instructions_mental_space,
     })
 
-def query_implicit_knowledge(lattice):
+def query_implicit_knowledge(project_id,lattice):
+    llm = create_llm_instance(project_id)
     template = (
         "Play the role of an Analyst eliciting knowledge from domain of interest."
         "Analyze the knowledge in this Mental Space Lattice: {lattice}."
