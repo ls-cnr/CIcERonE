@@ -143,7 +143,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 
 // POST route per creare un nuovo progetto
 router.post('/', authenticateToken, async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, chat_model_id, llm_model_id, api_key } = req.body;
   const userId = req.user.id;
   const mental_space_lattice = "Empty mental space";
   const analysis = "Analysis not yet available";
@@ -154,13 +154,13 @@ router.post('/', authenticateToken, async (req, res) => {
     const defaultChatModel = config.chatModels.find(model => model.isDefault);
     const defaultLLMModel = defaultChatModel.llmModels[0];
 
-    const chat_model_id = defaultChatModel.id;
-    const llm_model_id = defaultLLMModel.id;
-    const api_key = defaultChatModel.requiresAPIKey ? null : 'NO_KEY';
+    const finalChatModelId = chat_model_id || defaultChatModel.id;
+    const finalLLMModelId = llm_model_id || defaultLLMModel.id;
+    const finalApiKey = api_key || (defaultChatModel.requiresAPIKey ? null : 'NO_KEY');
 
     const [result] = await pool.query(
       'INSERT INTO projects (user_id, title, description, mental_space_lattice, analysis, generate_analysis, chat_model_id, llm_model_id, api_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [userId, title, description, mental_space_lattice, analysis, generate_analysis, chat_model_id, llm_model_id, api_key]
+      [userId, title, description, mental_space_lattice, analysis, generate_analysis, finalChatModelId, finalLLMModelId, finalApiKey]
     );
 
     res.status(201).json({
@@ -175,7 +175,6 @@ router.post('/', authenticateToken, async (req, res) => {
     });
   }
 });
-
 
 // DELETE route per eliminare un progetto
 router.delete('/:id', authenticateToken, async (req, res) => {

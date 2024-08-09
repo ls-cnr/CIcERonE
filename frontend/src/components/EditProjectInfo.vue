@@ -48,7 +48,7 @@
       </div>
       <div v-if="selectedChatModel && selectedChatModel.requiresAPIKey" class="form-group">
         <label for="apiKey">API Key:</label>
-        <input v-model="project.apiKey" type="password" id="apiKey" required @input="touchForm" placeholder="Enter API Key">
+        <input v-model="project.apiKey" type="text" id="apiKey" required @input="touchForm" placeholder="Enter API Key">
       </div>
       <div class="button-group">
         <button
@@ -117,16 +117,16 @@ export default {
         apiKey: originalProject.value.api_key
       });
 
-      console.log('Form validation:', { isValid, isFormTouched: isFormTouched.value, hasChanges });
-      console.log('Current project:', JSON.stringify(project));
-      console.log('Original project:', JSON.stringify(originalProject.value));
+      //console.log('Form validation:', { isValid, isFormTouched: isFormTouched.value, hasChanges });
+      //console.log('Current project:', JSON.stringify(project));
+      //console.log('Original project:', JSON.stringify(originalProject.value));
 
       return (isValid && isFormTouched.value) || hasChanges;
     });
 
     const touchForm = () => {
       isFormTouched.value = true;
-      console.log('Form touched');
+      //console.log('Form touched');
     };
 
     const updateLLMOptions = () => {
@@ -146,7 +146,7 @@ export default {
           project.apiKey = 'NO_KEY';
         }
       }
-      console.log('LLM options updated:', JSON.stringify(project));
+      //console.log('LLM options updated:', JSON.stringify(project));
       touchForm();
     };
 
@@ -163,7 +163,7 @@ export default {
         });
         config.value = response.data;
         isConfigLoaded.value = true;
-        console.log('Config loaded:', JSON.stringify(config.value));
+        //console.log('Config loaded:', JSON.stringify(config.value));
         if (isProjectLoaded.value) {
           syncProjectWithConfig();
         }
@@ -186,7 +186,7 @@ export default {
           }
         });
 
-        console.log('Project details received:', JSON.stringify(response.data));
+        //console.log('Project details received:', JSON.stringify(response.data));
 
         // Mappiamo i campi del database ai nomi dei campi usati nel frontend
         project.title = response.data.title;
@@ -199,8 +199,8 @@ export default {
         originalProject.value = JSON.parse(JSON.stringify(response.data));
         isProjectLoaded.value = true;
 
-        console.log('Project after assignment:', JSON.stringify(project));
-        console.log('Original project:', JSON.stringify(originalProject.value));
+        //console.log('Project after assignment:', JSON.stringify(project));
+        //console.log('Original project:', JSON.stringify(originalProject.value));
 
         if (isConfigLoaded.value) {
           syncProjectWithConfig();
@@ -222,7 +222,7 @@ export default {
           updateLLMOptions();
         }
       }
-      console.log('Project after sync:', JSON.stringify(project));
+      //console.log('Project after sync:', JSON.stringify(project));
     };
 
     const updateProject = async () => {
@@ -266,7 +266,7 @@ export default {
       try {
         await Promise.all([fetchConfig(), fetchProjectDetails()]);
         isFormTouched.value = false; // Reset touch state after initial load
-        console.log('Component mounted, form touched reset');
+        //console.log('Component mounted, form touched reset');
       } catch (error) {
         console.error('Error during component initialization:', error);
         error.value = 'Failed to initialize the component. Please try refreshing the page.';
@@ -327,7 +327,7 @@ label {
 .title-input,
 .description-input,
 select,
-input[type="password"] {
+input[type="text"] {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -340,7 +340,7 @@ input[type="password"] {
 .title-input:focus,
 .description-input:focus,
 select:focus,
-input[type="password"]:focus {
+input[type="text"]:focus {
   outline: none;
   border-color: #4CAF50;
 }

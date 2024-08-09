@@ -15,7 +15,7 @@
           type="text"
           class="title-input"
           required
-          @input="checkFields"
+          @input="touchForm"
           placeholder="Enter project title"
         />
       </div>
@@ -26,9 +26,29 @@
           v-model="project.description"
           class="description-input"
           required
-          @input="checkFields"
+          @input="touchForm"
           placeholder="Enter project description"
         ></textarea>
+      </div>
+      <div v-if="isConfigLoaded" class="form-group">
+        <label for="chatModel">Chat Model:</label>
+        <select v-model="selectedChatModel" @change="updateLLMOptions" id="chatModel" required>
+          <option v-for="model in config.chatModels" :key="model.id" :value="model">
+            {{ model.name }}
+          </option>
+        </select>
+      </div>
+      <div v-if="isConfigLoaded" class="form-group">
+        <label for="llmModel">LLM Model:</label>
+        <select v-model="project.llmModelId" id="llmModel" required @change="touchForm">
+          <option v-for="model in availableLLMModels" :key="model.id" :value="model.id">
+            {{ model.name }}
+          </option>
+        </select>
+      </div>
+      <div v-if="selectedChatModel && selectedChatModel.requiresAPIKey" class="form-group">
+        <label for="apiKey">API Key:</label>
+        <input v-model="project.apiKey" type="text" id="apiKey" required @input="touchForm" placeholder="Enter API Key">
       </div>
       <div class="button-group">
         <button
@@ -46,7 +66,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -54,13 +74,79 @@ export default {
   name: 'NewProject',
   setup() {
     const router = useRouter();
-    const project = reactive({ title: '', description: '' });
-    const isFormValid = ref(false);
+    const project = reactive({
+      title: '',
+      description: '',
+      chatModelId: null,
+      llmModelId: null,
+      apiKey: ''
+    });
+    const config = ref({ chatModels: [] });
+    const selectedChatModel = ref(null);
+    const isConfigLoaded = ref(false);
     const isLoading = ref(false);
     const error = ref('');
+    const isFormTouched = ref(false);
 
-    const checkFields = () => {
-      isFormValid.value = project.title.trim() !== '' && project.description.trim() !== '';
+    const availableLLMModels = computed(() => selectedChatModel.value?.llmModels || []);
+
+    const isFormValid = computed(() => {
+      const isValid =
+        project.title.trim() !== '' &&
+        project.description.trim() !== '' &&
+        project.chatModelId !== null &&
+        project.llmModelId !== null &&
+        (!selectedChatModel.value?.requiresAPIKey || project.apiKey.trim() !== '');
+
+      return isValid && isFormTouched.value;
+    });
+
+    const touchForm = () => {
+      isFormTouched.value = true;
+    };
+
+    const updateLLMOptions = () => {
+      if (selectedChatModel.value) {
+        project.chatModelId = selectedChatModel.value.id;
+        const availableLLMs = selectedChatModel.value.llmModels;
+        if (availableLLMs.length > 0) {
+          project.llmModelId = availableLLMs[0].id;
+        } else {
+          project.llmModelId = null;
+        }
+        if (selectedChatModel.value.requiresAPIKey && !project.apiKey) {
+          project.apiKey = '';
+        } else if (!selectedChatModel.value.requiresAPIKey) {
+          project.apiKey = 'NO_KEY';
+        }
+      }
+      touchForm();
+    };
+
+    const fetchConfig = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/chat-llm-models`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        config.value = response.data;
+        isConfigLoaded.value = true;
+
+        // Set default chat model
+        const defaultChatModel = config.value.chatModels.find(model => model.isDefault);
+        if (defaultChatModel) {
+          selectedChatModel.value = defaultChatModel;
+          updateLLMOptions();
+        }
+      } catch (error) {
+        console.error('Error fetching configuration:', error);
+        error.value = 'Failed to load configuration. Please try again.';
+      }
     };
 
     const createProject = async () => {
@@ -71,7 +157,13 @@ export default {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/projects`, project, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/projects`, {
+          title: project.title,
+          description: project.description,
+          chat_model_id: project.chatModelId,
+          llm_model_id: project.llmModelId,
+          api_key: project.apiKey
+        }, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -94,18 +186,28 @@ export default {
       }
     };
 
+    onMounted(async () => {
+      await fetchConfig();
+    });
+
     return {
       project,
+      config,
+      selectedChatModel,
+      isConfigLoaded,
       isFormValid,
       isLoading,
       error,
-      checkFields,
+      availableLLMModels,
       createProject,
-      cancel
+      cancel,
+      touchForm,
+      updateLLMOptions
     };
   }
 };
 </script>
+
 
 <style scoped>
 .new-project {
@@ -135,7 +237,9 @@ label {
 }
 
 .title-input,
-.description-input {
+.description-input,
+select,
+input[type="text"] {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -146,13 +250,15 @@ label {
 }
 
 .title-input:focus,
-.description-input:focus {
+.description-input:focus,
+select:focus,
+input[type="text"]:focus {
   outline: none;
   border-color: #4CAF50;
 }
 
 .description-input {
-  min-height: 100px;
+  min-height: 150px;
   resize: vertical;
 }
 
