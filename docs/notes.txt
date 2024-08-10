@@ -1,7 +1,6 @@
 Note (in ordine di priorità):
 
 Alta priorità:
-1. Implementare la logica di backend per la funzionalità "Acquire Viewpoint" e "Upload Doc".
 2. Aggiungere validazione robusta dei dati input lato client e server per tutti i form dell'applicazione.
 3. Implementare una gestione degli errori più robusta e user-friendly in tutta l'applicazione.
 4. Migliorare la sicurezza implementando un meccanismo di refresh token e logout sicuro.
