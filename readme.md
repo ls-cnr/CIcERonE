@@ -20,7 +20,7 @@ graph TD
     C -->|HTTP Requests| E[Flask LLM Service]
     E -->|LLM Queries| F[Ollama LLM]
 ```
-[![](https://mermaid.ink/img/pako:eNpV0E1PwzAMBuC_YuUE0gb3HpDWdhVIHWy04pL2YBpvLUvTkQ_QtO6_k5RpiByi5NVjW8mJNYMgFrGdxkMLZVop8GvBE9mRshDr4duQrmE-fxgfy3J9H7ZihJi_Obr7MJDpQVlSov6tjCe5WD9BglKaERL-7CcEGWOz_4PJBItNDhtHuiNPU36zOoYkRYvvaOj2nw2T4ZU-HRnr9ZJnEs0e8nwFBemvrqELX0485NfWGX-REnsMumYz1pPusRP-4adQUzHbUk8Vi_xR0BadtBWr1NlTdHYojqphkdWOZkwPbteyaIvS-Js7CLSUdug_sL-k5x9l9W5L?type=png)](https://mermaid.live/edit#pako:eNpV0E1PwzAMBuC_YuUE0gb3HpDWdhVIHWy04pL2YBpvLUvTkQ_QtO6_k5RpiByi5NVjW8mJNYMgFrGdxkMLZVop8GvBE9mRshDr4duQrmE-fxgfy3J9H7ZihJi_Obr7MJDpQVlSov6tjCe5WD9BglKaERL-7CcEGWOz_4PJBItNDhtHuiNPU36zOoYkRYvvaOj2nw2T4ZU-HRnr9ZJnEs0e8nwFBemvrqELX0485NfWGX-REnsMumYz1pPusRP-4adQUzHbUk8Vi_xR0BadtBWr1NlTdHYojqphkdWOZkwPbteyaIvS-Js7CLSUdug_sL-k5x9l9W5L)
+
 
 ## 2. Struttura del Progetto
 
@@ -106,7 +106,6 @@ graph TD
     H -.-> E
     I -.-> C
 ```
-[![](https://mermaid.ink/img/pako:eNpVkdFqwyAUhl9FznWzB8jFII1pGyijdGM32gsXTxJHoplRSil999noYPFC_P7Pcw7oHRojEXLorJh68kG5JmEV7Gg6pS8ky17Jlp2xU7NDe0l2iUtGxdx_GWFlysslp-wNr-RkzTc2bmUqllLyqfCaVLWoHaukcn9VpNatWfk9K5ofrywupZNR2q38gRVaDLdZzf97x7H1c2yrBkxp3LckewmyiEQjlZF2kapI-xUdVlSnOtjAiHYUSoa3vD8dB9fjiBzycJTYCj84Dlw_wlXhnXm_6QZyZz1uwBrf9ZC3YpgD-UkKh1SJ8CdjSh-_pqF63Q?type=png)](https://mermaid.live/edit#pako:eNpVkdFqwyAUhl9FznWzB8jFII1pGyijdGM32gsXTxJHoplRSil999noYPFC_P7Pcw7oHRojEXLorJh68kG5JmEV7Gg6pS8ky17Jlp2xU7NDe0l2iUtGxdx_GWFlysslp-wNr-RkzTc2bmUqllLyqfCaVLWoHaukcn9VpNatWfk9K5ofrywupZNR2q38gRVaDLdZzf97x7H1c2yrBkxp3LckewmyiEQjlZF2kapI-xUdVlSnOtjAiHYUSoa3vD8dB9fjiBzycJTYCj84Dlw_wlXhnXm_6QZyZz1uwBrf9ZC3YpgD-UkKh1SJ8CdjSh-_pqF63Q)
 
 ### Spiegazione della Mappa di Navigazione:
 - Le frecce solide indicano la navigazione in avanti.
