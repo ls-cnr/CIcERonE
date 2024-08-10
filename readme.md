@@ -1,5 +1,7 @@
 # CIcERonE
 
+![Hits](https://hits.sh/github.com/ls-cnr/CIcERonE.svg)
+
 CIcERonE WebApp is an innovative tool designed to enhance the Contextual Inquiry process and requirements elicitation in software engineering. Based on mental space theory and cognitive linguistics, CIcERonE (Concatenate Interview with Early Requirement) offers a framework for organizing and analyzing qualitative data collected during stakeholder interviews.
 
 ## Overview
