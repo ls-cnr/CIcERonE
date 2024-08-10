@@ -1,16 +1,27 @@
-# CIcERonE WebApp: Architettura e Struttura
+# CIcERonE
 
-## Descrizione Generale
+CIcERonE WebApp is an innovative tool designed to enhance the Contextual Inquiry process and requirements elicitation in software engineering. Based on mental space theory and cognitive linguistics, CIcERonE (Concatenate Interview with Early Requirement) offers a framework for organizing and analyzing qualitative data collected during stakeholder interviews.
 
-CIcERonE WebApp è un'applicazione web a pagina singola (SPA) progettata per la gestione della Contextual Inquiry. L'architettura è composta da:
+## Overview
+CIcERonE WebApp facilitates the transition from the informality of the real world to the semi-formality of requirements models, preserving the richness of original data. It utilizes natural language processing techniques to identify ambiguities, inconsistencies, and missing points in collected information.
 
-1. **Frontend**: Implementato con Vue.js, gestisce l'interfaccia utente e le interazioni.
-2. **Backend**: Un server Node.js con Express che gestisce le API, l'autenticazione e la comunicazione con il database.
-3. **Database**: MySQL per la persistenza dei dati degli utenti e dei progetti.
-4. **Servizio LLM**: Un server Flask separato che gestisce l'elaborazione del linguaggio naturale utilizzando il modello LLM Ollama.
+Key features:
+- Data structuring in a mental space lattice
+- Effective management of multiple viewpoints
+- LLM-assisted linguistic and semantic analysis
+- Support for tacit knowledge identification
 
-Questa struttura permette una separazione chiara delle responsabilità, con il frontend che gestisce la presentazione, il backend che gestisce la logica di business e l'accesso ai dati, e il servizio LLM che si occupa dell'elaborazione avanzata del linguaggio naturale.
-## 1. Architettura del Sistema
+This tool is particularly useful for socio-technical system projects, where integrating social and technical components is crucial. CIcERonE WebApp helps analysts capture and interpret the nuances of human interactions and user needs, providing a solid foundation for subsequent conceptual modeling and requirements development.
+
+## 1. System Architecture
+CIcERonE WebApp is a Single Page Application (SPA) designed for Contextual Inquiry management. The architecture comprises:
+
+1. **Frontend**: Implemented with Vue.js, managing the user interface and interactions.
+2. **Backend**: A Node.js server with Express handling APIs, authentication, and database communication.
+3. **Database**: MySQL for user and project data persistence.
+4. **LLM Service**: A separate Flask server managing natural language processing using the Ollama LLM model.
+
+This structure allows for a clear separation of responsibilities, with the frontend handling presentation, the backend managing business logic and data access, and the LLM service handling advanced natural language processing.
 
 ```mermaid
 graph TD
@@ -22,7 +33,7 @@ graph TD
 ```
 
 
-## 2. Struttura del Progetto
+## 2. Project Structure
 
 ```
 cicerone-webapp/
@@ -62,7 +73,7 @@ cicerone-webapp/
 └── .env
 ```
 
-## 3. Schema del Database
+## 3. Database Schema
 
 ```sql
 CREATE TABLE users (
@@ -86,7 +97,7 @@ CREATE TABLE projects (
 );
 ```
 
-## 4. Mappa di Navigazione
+## 4. Navigation Map
 
 ```mermaid
 graph TD
@@ -107,41 +118,42 @@ graph TD
     I -.-> C
 ```
 
-### Spiegazione della Mappa di Navigazione:
-- Le frecce solide indicano la navigazione in avanti.
-- Le frecce tratteggiate indicano il ritorno alla pagina precedente.
-- Tutte le pagine (eccetto Login e Register) richiedono autenticazione.
-- Dal Dashboard, gli utenti possono accedere a nuovi progetti, visualizzare progetti esistenti o modificare il proprio profilo.
-- Dalla visualizzazione del progetto (Project View), gli utenti possono modificare le informazioni del progetto, acquisire nuovi punti di vista o visualizzare/generare l'analisi.
 
 
-## 5. Avvio del Sistema
 
-Per avviare correttamente il sistema CIcERonE WebApp, è necessario seguire un ordine specifico:
+### Navigation Map Explanation:
+- Solid arrows indicate forward navigation.
+- Dashed arrows indicate return to the previous page.
+- All pages (except Login and Register) require authentication.
+- From the Dashboard, users can access new projects, view existing projects, or edit their profile.
+- From Project View, users can edit project information, acquire new viewpoints, or view/generate analysis.
 
-1. Avviare il servizio Flask (LLM Service)
-2. Avviare il backend Node.js
-3. Avviare il frontend Vue.js
 
-Di seguito sono riportate le istruzioni per ciascun sistema operativo.
+## 5. System Startup
+
+To correctly start the CIcERonE WebApp system, follow this specific order:
+
+1. Start the Flask service (LLM Service)
+2. Start the Node.js backend
+3. Start the Vue.js frontend
 
 ### Windows
 
-1. Avviare il servizio Flask:
+1. Start the Flask service:
    ```
    cd path\to\flaskRAG
    .\venv\Scripts\activate
    python app.py
    ```
 
-2. Avviare il backend Node.js (in una nuova finestra del terminale):
+2. Start the Node.js backend (in a new terminal window):
    ```
    cd path\to\backend
    npm install
    npm start
    ```
 
-3. Avviare il frontend Vue.js (in una nuova finestra del terminale):
+3. Start the Vue.js frontend (in a new terminal window):
    ```
    cd path\to\frontend
    npm install
@@ -150,39 +162,48 @@ Di seguito sono riportate le istruzioni per ciascun sistema operativo.
 
 ### macOS e Linux
 
-1. Avviare il servizio Flask:
+1. Start the Flask service:
    ```
    cd /path/to/flaskRAG
    source venv/bin/activate
    python app.py
    ```
 
-2. Avviare il backend Node.js (in un nuovo terminale):
+2. Start the Node.js backend (in a new terminal):
    ```
    cd /path/to/backend
    npm install
    npm start
    ```
 
-3. Avviare il frontend Vue.js (in un nuovo terminale):
+3. Start the Vue.js frontend (in a new terminal):
    ```
    cd /path/to/frontend
    npm install
    npm run serve
    ```
 
-### Note Importanti:
+### Important Notes:
+- Ensure all dependencies are installed before starting each service.
+- The Flask service must be up and running before starting the Node.js backend.
+- Verify that the environment variables in the .env file are correctly configured for your environment.
+- If using a Python virtual environment for Flask, make sure to activate it before starting the service.
 
-- Assicurarsi che tutte le dipendenze siano installate prima di avviare ciascun servizio.
-- Il servizio Flask deve essere avviato e funzionante prima di avviare il backend Node.js.
-- Verificare che le variabili d'ambiente nel file `.env` siano configurate correttamente per il proprio ambiente.
-- Se si utilizza un ambiente virtuale Python per Flask, assicurarsi di attivarlo prima di avviare il servizio.
 
-### Verifica dell'Avvio
+### Startup Verification
 
-1. Il servizio Flask dovrebbe essere disponibile all'indirizzo `http://localhost:5000` (o sulla porta specificata).
-2. Il backend Node.js dovrebbe essere in esecuzione sulla porta 3000 (o sulla porta specificata).
-3. Il frontend Vue.js sarà accessibile all'indirizzo `http://localhost:8080` (o sull'indirizzo fornito dal comando `npm run serve`).
+1. The Flask service should be available at http://localhost:5000 (or the specified port).
+2. The Node.js backend should be running on port 3000 (or the specified port).
+3. The Vue.js frontend will be accessible at http://localhost:8080 (or the address provided by the npm run serve command).
 
-Una volta che tutti i servizi sono in esecuzione, è possibile accedere all'applicazione CIcERonE WebApp tramite il browser all'indirizzo del frontend Vue.js.
+Once all services are running, you can access the CIcERonE WebApp application via the browser at the Vue.js frontend address.
 
+
+### Contributing
+We welcome contributions to CIcERonE WebApp! Please read our CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
+
+
+### Acknowledgments
+
+Thanks to all contributors who will help shape CIcERonE WebApp.
+Special thanks to the research team behind the mental space theory and cognitive linguistics that inspired this project.
